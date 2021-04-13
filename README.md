@@ -10,12 +10,18 @@ This repository contains the whole project, except for the data. I will share my
 
 <a name="project-desc"></a>
 ## Project installation
-So to run the project, make sure docker-compose is installed correctly before executing the following command to build the Dockerfile, which will hold the Python app.
+
+First make sure the `vm.max_map_count` kernel setting is at least set to 262144, [click here for more information](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_set_vm_max_map_count_to_at_least_262144)
+
+Next, elasticsearch needs write access to the data folder. We use a local data folder to make sure we don't lose any data when a container gets destroyed or something. To make sure Elasticsearch has access to the folder, run the following commands (as root if necessary).
 
 ```Shell
-docker-compose build
+mkdir ./elk/esdata
+chmod g+rwx ./elk/esdata
+chgrp 0 ./elk/esdata
 ```
-And after building, start the cluster
+
+So to run the project, make sure docker-compose is installed correctly before executing the following command to build and start the containers. It builds the images if they are not located locally and starts the containers. If images are already built, it will fork the container directly.
 
 ```Shell
 docker-compose up
